@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit One Quiz — High Note Grade 11</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;min-height:100vh;color:#1a1a1a}
+  #app{max-width:720px;margin:0 auto;padding:1.5rem 1rem 3rem}
+  .header{text-align:center;margin-bottom:2rem;padding-top:1rem}
+  .header h1{font-size:22px;font-weight:600;color:#1a1a1a}
+  .header p{font-size:13px;color:#666;margin-top:5px}
+  .progress-wrap{margin-bottom:1.5rem}
+  .progress-bar{width:100%;height:6px;background:#e0dfd8;border-radius:3px}
+  .progress-fill{height:6px;background:#534AB7;border-radius:3px;transition:width 0.3s}
+  .q-counter{font-size:13px;color:#666;margin-bottom:6px;display:flex;justify-content:space-between}
+  .q-card{background:#fff;border:1px solid #e5e4de;border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+  .section-badge{font-size:11px;font-weight:600;color:#534AB7;background:#EEEDFE;padding:4px 10px;border-radius:20px;display:inline-block;margin-bottom:10px;letter-spacing:0.3px}
+  .q-text{font-size:15px;color:#1a1a1a;line-height:1.7;margin-bottom:1.2rem;white-space:pre-line}
+  .options{display:grid;gap:8px}
+  .opt-btn{width:100%;text-align:left;padding:11px 16px;border:1px solid #e0dfd8;border-radius:8px;background:#fafaf8;color:#1a1a1a;font-size:14px;cursor:pointer;transition:all 0.15s;font-family:inherit}
+  .opt-btn:hover:not(:disabled){background:#f0efe8;border-color:#b0b0a8}
+  .opt-btn.correct{background:#EAF3DE;border-color:#639922;color:#27500A;font-weight:500}
+  .opt-btn.wrong{background:#FCEBEB;border-color:#A32D2D;color:#501313}
+  .opt-btn:disabled{cursor:default}
+  .feedback{font-size:13px;margin-top:10px;padding:8px 12px;border-radius:8px}
+  .feedback.correct{background:#EAF3DE;color:#27500A}
+  .feedback.wrong{background:#FCEBEB;color:#501313}
+  .nav{display:flex;gap:10px;justify-content:center;margin-top:1.5rem;flex-wrap:wrap}
+  .nav button{padding:10px 24px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;font-size:14px;cursor:pointer;font-family:inherit;transition:all 0.15s}
+  .nav button:hover{background:#f0efe8}
+  .nav button.primary{background:#534AB7;color:#fff;border-color:#534AB7}
+  .nav button.primary:hover{background:#3C3489}
+  .score-card{text-align:center;padding:2.5rem 1rem}
+  .score-big{font-size:52px;font-weight:700;color:#534AB7;line-height:1}
+  .score-label{font-size:15px;color:#555;margin:10px 0 2rem}
+  .grade-badge{display:inline-block;padding:6px 18px;border-radius:20px;font-size:14px;font-weight:600;margin-bottom:1.5rem}
+  .score-breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:1rem 0}
+  .stat-box{background:#f5f4f0;border-radius:10px;padding:1rem;border:1px solid #e5e4de}
+  .stat-num{font-size:24px;font-weight:600}
+  .stat-lbl{font-size:12px;color:#666;margin-top:4px}
+  .stat-box.cs .stat-num{color:#3B6D11}
+  .stat-box.ws .stat-num{color:#A32D2D}
+  .stat-box.ss .stat-num{color:#854F0B}
+  .btn-review{margin-top:1.5rem;padding:12px 28px;border:none;border-radius:8px;background:#534AB7;color:#fff;font-size:14px;cursor:pointer;font-family:inherit;font-weight:500}
+  .btn-review:hover{background:#3C3489}
+  .btn-restart{margin-top:10px;padding:10px 24px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#1a1a1a;font-size:14px;cursor:pointer;font-family:inherit}
+  .btn-restart:hover{background:#f0efe8}
+  .section-sep{border:none;border-top:1px solid #e5e4de;margin:1.5rem 0}
+  .review-header{display:flex;gap:10px;align-items:center;margin-bottom:1.5rem}
+  .review-title{font-size:16px;font-weight:600;color:#1a1a1a}
+  .skipped-note{font-size:12px;color:#854F0B;background:#FAEEDA;padding:6px 10px;border-radius:6px;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <h1>Unit One — High Note Grade 11 ⭐</h1>
+    <p>Vocabulary · Idioms · Tenses &nbsp;|&nbsp; اختر الإجابة الصحيحة</p>
+  </div>
+  <div id="main"></div>
+</div>
+
+<script>
+const questions = [
+  {s:"Vocabulary — Fill in the blank",q:"1. If I'm bored on the train, I like to ---- up a conversation with a fellow passenger.",o:["A) come","B) strike","C) hit","D) have"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"2. I was ---- after that horror film. I had to sleep with my light on!",o:["A) bewildered","B) terrified","C) exasperated","D) ecstatic"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"3. I could see an animal at the end of the garden, but I couldn't make ---- what it was exactly because it was getting dark.",o:["A) up","B) out","C) through","D) about"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"4. It's bad news for Eric now that his favourite team have lost. He's ---- and I don't know how to cheer him up.",o:["A) devastated","B) astonished","C) thrilled","D) ecstatic"],a:0},
+  {s:"Vocabulary — Fill in the blank",q:"5. Ann is always forgetting her homework. Her mum needs to ---- out to her how important it is.",o:["A) bring","B) talk","C) spell","D) get"],a:2},
+  {s:"Vocabulary — Fill in the blank",q:"6. You should ---- in touch with Gail. She's been a good friend to you.",o:["A) stay","B) lose","C) maintain","D) convey"],a:0},
+  {s:"Vocabulary — Fill in the blank",q:"7. I've lost my sunglasses. Let me know if you ---- across them.",o:["A) bring","B) come","C) get","D) make"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"8. The poster we're designing for the new music club needs to ---- the message that all ages are welcome.",o:["A) carry","B) bring","C) maintain","D) lose"],a:0},
+  {s:"Vocabulary — Fill in the blank",q:"9. If you make a favourable ----, it means people like the way you look and behave.",o:["A) conversation","B) impression","C) compliment","D) laugh"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"10. If you find the right answer to a puzzle by thinking, it means you ---- it out.",o:["A) spell","B) point","C) figure","D) get"],a:2},
+  {s:"Similar meaning",q:"11. Jean seems to know everything about space technology when people talk to her about it.\nThe sentence which has a similar meaning is:",o:["A) Jean takes to know everything about space technology when people talk to her about it.","B) Jean spells out that she knows everything about space technology when people talk to her about it.","C) Jean comes across as she knows everything about space technology when people talk to her about it.","D) Jean points out that she knows everything about space technology when people talk to her about it."],a:2},
+  {s:"Vocabulary — Fill in the blank",q:"12. There is a lot of information to take ---- during this workshop. You need to write it down.",o:["A) over","B) in","C) to","D) about"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"13. How do you think an alien civilisation might try to ---- contact with us here on Earth?",o:["A) establish","B) access","C) deliver","D) pass on"],a:0},
+  {s:"Vocabulary — Fill in the blank",q:"14. A well-written essay should ---- a clear message about the writer's opinion.",o:["A) pass on","B) convey","C) lose","D) stay"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"15. If you pay someone a ----, you say something nice about them.",o:["A) conversation","B) complement","C) compliment","D) laugh"],a:2},
+  {s:"Vocabulary — Fill in the blank",q:"16. In a class discussion, someone ---- out that people in general still don't know enough about this.",o:["A) came","B) wiped","C) took","D) pointed"],a:3},
+  {s:"Similar meaning",q:"17. A whole species can become extinct because of habitat loss.\nThe sentence that has a similar meaning is:",o:["A) Habitat loss wipes out a whole species.","B) Habitat loss comes across a whole species.","C) Habitat loss picks up a whole species.","D) Habitat loss brings about a whole species."],a:0},
+  {s:"Similar meaning",q:"18. I would like to make my basketball team change their attitude to competing.\nThe sentence that has a similar meaning is:",o:["A) I would like to bring about a change in my basketball team's attitude to competing.","B) I would like to wipe out a change in my basketball team's attitude to competing.","C) I would like to make out a change in my basketball team's attitude to competing.","D) I would like to get across a change in my basketball team's attitude to competing."],a:0},
+  {s:"Vocabulary — Fill in the blank",q:"19. If someone puts you on the ----, it means they ask you a surprise question.",o:["A) edgeways","B) throat","C) spot","D) fire"],a:2},
+  {s:"Vocabulary — Fill in the blank",q:"20. Mrs. Carter was ---- when someone damaged her car. I've never seen her so angry.",o:["A) ecstatic","B) tense","C) livid","D) thrilled"],a:2},
+  {s:"Similar meaning",q:"21. Has anyone solved our waste disposal problem?\nThe sentence that has a similar meaning is:",o:["A) Has anyone come across a solution to our waste disposal problem?","B) Has anyone made out a solution to our waste disposal problem?","C) Has anyone wiped out a solution to our waste disposal problem?","D) Has anyone come across as a solution to our waste disposal problem?"],a:0},
+  {s:"Similar meaning",q:"22. A company's advertising department looks for ways to change customers' attitudes.\nThe sentence that has a similar meaning is:",o:["A) A company's advertising department looks for ways to bring about a change in customers' attitudes.","B) A company's advertising department looks for ways to wipe out a change in customers' attitudes.","C) A company's advertising department looks for ways to make out a change in customers' attitudes.","D) A company's advertising department looks for ways to point out a change in customers' attitudes."],a:0},
+  {s:"Vocabulary — Fill in the blank",q:"23. I think you'll ---- my friend Peter when you meet him. He's very nice.",o:["A) take in","B) take to","C) hit it off","D) come across as"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"24. When you are completely confused by an unexpected situation, you are --------.",o:["A) tense","B) bewildered","C) devastated","D) astonished"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"25. Susan can ---- up languages quickly. She can communicate in Spanish after only a few months of lessons.",o:["A) come","B) pick","C) get","D) take"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"26. The famous scientist ---- out his main message a few times to be sure everyone really got it.",o:["A) spoke","B) carried","C) made","D) spelt"],a:3},
+  {s:"Vocabulary — Fill in the blank",q:"27. Judith was angry with me after we argued about healthcare. She kept referring to it and wouldn't let it --------.",o:["A) drop","B) finish","C) fall","D) stay"],a:0},
+  {s:"Cross out the wrong word",q:"28. I don't want to lose ---- with my friends.\nWhich word does NOT collocate?",o:["A) contact","B) touch","C) knowledge"],a:2},
+  {s:"Cross out the wrong word",q:"28b. The article aims to ---- an important message.\nWhich word does NOT collocate?",o:["A) convey","B) process","C) carry"],a:1},
+  {s:"Similar meaning",q:"29. When I'm very sad, I watch funny videos.\nThe sentence that has a similar meaning is:",o:["A) When I'm down in the dumps, I watch funny videos.","B) When I'm walking on air, I watch funny videos.","C) When I'm worried sick, I watch funny videos.","D) When I can't stop smiling, I watch funny videos."],a:0},
+  {s:"Similar meaning",q:"30. She seemed rather arrogant at first.\nThe sentence that has a similar meaning is:",o:["A) She came across as arrogant at first.","B) She pointed out as arrogant at first.","C) She made out as arrogant at first.","D) She brought about as arrogant at first."],a:0},
+  {s:"Similar meaning",q:"31. After an hour, we found a way how to turn off unwanted messages.\nThe sentence that has a similar meaning is:",o:["A) It took us an hour to wipe out how to turn off unwanted messages.","B) It took us an hour to figure out how to turn off unwanted messages.","C) It took us an hour to bring about how to turn off unwanted messages.","D) It took us an hour to spell out how to turn off unwanted messages."],a:1},
+  {s:"Similar meaning",q:"32. This app enables people to maintain regular contacts.\nThe sentence that has a similar meaning is:",o:["A) Thanks to this app, people can lose touch regularly.","B) Thanks to this app, people can stay in touch regularly.","C) Thanks to this app, people can carry the message.","D) Thanks to this app, people can pass on the message."],a:1},
+  {s:"Idioms",q:"33. She talked so much that I didn't manage to say anything at all during lunch.\nThe idiom that describes this situation is:",o:["A) I couldn't get a word in edgeways.","B) You insist on having the last word.","C) I refused to let it drop.","D) I didn't like being put on the spot."],a:0},
+  {s:"Idioms",q:"34. You always have to be the last one to speak, don't you?\nThe idiom that describes this situation is:",o:["A) I couldn't get a word in edgeways.","B) You insist on having the last word.","C) I refused to let it drop.","D) I didn't like being put on the spot."],a:1},
+  {s:"Idioms",q:"35. I told him I didn't want to talk about it anymore, but he wouldn't stop.\nThe idiom that describes this situation is:",o:["A) I couldn't get a word in edgeways.","B) You insist on having the last word.","C) He refused to let it drop.","D) I didn't like being put on the spot."],a:2},
+  {s:"Idioms",q:"36. He is driving me up the wall! — What does this phrase express?",o:["A) Annoyance","B) Sadness","C) Happiness","D) Surprise"],a:0},
+  {s:"Similar meaning",q:"37. He started talking to the new neighbour.\nThe sentence that has a similar meaning is:",o:["A) He had a laugh with the new neighbour.","B) He struck up a conversation with the new neighbour.","C) He hit it off with the new neighbour.","D) He took to the new neighbour."],a:1},
+  {s:"Similar meaning",q:"38. She gave the impression of being very self-confident.\nThe sentence that has a similar meaning is:",o:["A) She came across as being very self-confident.","B) She took to be very self-confident.","C) She paid them a compliment for being very self-confident.","D) She made small talk about being very self-confident."],a:0},
+  {s:"Similar meaning",q:"39. Abeer commented on how nice her shoes were.\nThe sentence that has a similar meaning is:",o:["A) Abeer paid her a compliment about her shoes.","B) Abeer made small talk about her shoes.","C) Abeer had a laugh about her shoes.","D) Abeer created a strong bond about her shoes."],a:0},
+  {s:"Similar meaning",q:"40. I immediately liked him.\nThe sentence that has a similar meaning is:",o:["A) I hit it off him immediately.","B) I took to him immediately.","C) I made small talk with him immediately.","D) I created a weak bond with him immediately."],a:1},
+  {s:"Similar meaning",q:"41. I didn't really like her friends when I met them.\nThe sentence that has a similar meaning is:",o:["A) I didn't really take to with her friends when I met them.","B) I didn't really hit it off with her friends when I met them.","C) I didn't really make a favourable impression on her friends when I met them.","D) I didn't really make small talk with her friends when I met them."],a:1},
+  {s:"Similar meaning",q:"42. We found it really funny.\nThe sentence that has a similar meaning is:",o:["A) We made small talk about it.","B) We made a favourable impression of it.","C) We had a laugh about it.","D) We struck up a conversation about it."],a:2},
+  {s:"Vocabulary — Idioms / Replace",q:"43. A: 'I'm extremely concerned about my aunt – she isn't very well.'\nWhich of the following could replace the underlined words?",o:["A) I'm feeling a bit down in the dumps.","B) I'm walking on air!","C) I'm worried sick","D) I can breathe a sigh of relief now."],a:2},
+  {s:"Vocabulary — Idioms / Replace",q:"44. B: 'There's no need to worry. You'll be great!'\nWhich of the following could replace the underlined words?",o:["A) I'm really pleased for you.","B) What's the worst that could happen?","C) I'm walking on air!","D) I don't blame you."],a:1},
+  {s:"Vocabulary — Idioms",q:"45. All of the following phrases express annoyance and frustration EXCEPT:",o:["A) That noise is driving me up the wall!","B) His loud laugh really gets on my nerves.","C) I've had it up to here with your complaints.","D) I'm feeling a bit down in the dumps."],a:3},
+  {s:"Dialogue",q:"46. Aisha: How did the interview go?\nGhada: I got the job! I can't stop smiling!\nAisha: That's awesome! --------\nThe best response to complete the dialogue is:",o:["A) What's the worst that could happen?","B) I'm so sorry to hear that.","C) I'm really pleased for you.","D) I know, right?"],a:2},
+  {s:"Vocabulary",q:"47. Which of the following has the strongest meaning?",o:["A) ecstatic","B) sad","C) tense","D) frightened"],a:0},
+  {s:"Vocabulary",q:"48. Which of the following has the weakest meaning?",o:["A) bewildered","B) frightened","C) astonished","D) nervous"],a:3},
+  {s:"Vocabulary — Fill in the blank",q:"49. That building is a long way away, but I can ---- the writing on its wall because I've got good eyes.",o:["A) bring about","B) make out","C) point out","D) spell out"],a:1},
+  {s:"Vocabulary — Fill in the blank",q:"50. Jack was so ---- when the police came to ask him about the fire that he couldn't think clearly when they questioned him.",o:["A) tense","B) sad","C) thrilled","D) ecstatic"],a:0},
+  {s:"Tenses — Fill in the blank",q:"88. You can't talk to Derek now. He ---- an important report.",o:["A) has written","B) is writing","C) had written","D) was writing"],a:1},
+  {s:"Tenses — Fill in the blank",q:"89. I'm here for the extra music lessons. I'm in the right classroom, --------?",o:["A) don't I","B) aren't I","C) am I","D) are I"],a:1},
+  {s:"Tenses — Fill in the blank",q:"90. I think playing computer games improves my problem-solving skills, but unfortunately my mum ---- it that way, and she has reduced my playing time.",o:["A) isn't seeing","B) doesn't see","C) won't see","D) didn't see"],a:1},
+  {s:"Tenses — Fill in the blank",q:"91. Nobody in my family knew the answer, --------?",o:["A) didn't he","B) did he","C) didn't they","D) did they"],a:3},
+  {s:"Tenses — Fill in the blank",q:"92. Somebody has been baking cakes in this kitchen, --------?",o:["A) has she","B) hasn't she","C) haven't they","D) have they"],a:2},
+  {s:"Tenses — Fill in the blank",q:"93. A: ---- visit the Japanese centre today, shall we?\nB: That's a great idea!",o:["A) We have not","B) Let's","C) Shall","D) Let them"],a:1},
+  {s:"Tenses — Fill in the blank",q:"94. A: We got to the restaurant a bit late last night and they hadn't kept the table we had reserved.\nB: ---- they? That's not very nice. How late were you?",o:["A) Had","B) Hadn't","C) Did","D) Didn't"],a:3},
+  {s:"Tenses — Fill in the blank",q:"95. Our world ---- in dramatic ways, especially the environment.",o:["A) have been changing","B) is changing","C) change","D) changing"],a:1},
+  {s:"Similar meaning — Tenses",q:"96. Gerry arrived at the International Space Station in July and he's still living there.\nThe sentence which has the same meaning is:",o:["A) Gerry had been living at the International Space Station since July.","B) Gerry has been living at the International Space Station since July.","C) Gerry is living at the International Space Station since July.","D) Gerry lives at the International Space Station since July."],a:1},
+  {s:"Tenses — Fill in the blank",q:"97. It's late. Let's call a taxi, --------?",o:["A) shall we","B) will we","C) do we","D) won't we"],a:0},
+  {s:"Tenses — Fill in the blank",q:"98. The children didn't see the teacher enter the room because they ---- hard.",o:["A) have worked","B) worked","C) were working","D) will work"],a:2},
+  {s:"Tenses — Fill in the blank",q:"99. A: Can I borrow the key to the garden gate, please?\nB: Sure, but don't lose it, --------? We've only got one key for that gate.",o:["A) do you","B) won't you","C) will you","D) don't you"],a:2},
+  {s:"Tenses — Fill in the blank",q:"100. In our group, we explored the various reasons why some animals and plants are critically endangered. Sadly, many species ---- extinct.",o:["A) have already become","B) already become","C) already became","D) have already been becoming"],a:0},
+  {s:"Tenses — Fill in the blank",q:"101. While we ---- on our presentation, one student in our group quickly stood up and walked away.",o:["A) were working","B) worked","C) had been working","D) had worked"],a:0},
+  {s:"Similar meaning — Tenses",q:"102. There hasn't been a phone call for me, has there?\nThe sentence that has a similar meaning is:",o:["A) Nobody has called me on the phone, hasn't he?","B) Nobody has called me on the phone, hasn't she?","C) Nobody has called me on the phone, have they?","D) Nobody has called me on the phone, haven't they?"],a:2},
+  {s:"Tenses — Fill in the blank",q:"103. I'm so annoyed with Tom. He's ---- interrupting me when we're talking with friends.",o:["A) usually","B) often","C) always","D) already"],a:2},
+  {s:"Tenses — Fill in the blank",q:"104. A: I'm running a marathon next Saturday.\nB: ---- you? Good luck!",o:["A) Am","B) Are","C) Was","D) Aren't"],a:1},
+  {s:"Tenses — Fill in the blank",q:"105. Animals ---- loud sudden noises. People should not use fireworks near them.",o:["A) don't like","B) didn't like","C) haven't liked","D) isn't liking"],a:0},
+  {s:"Tenses — Fill in the blank",q:"106. A: We don't have enough time to get to the cinema for the start of the film.\nB: ---- ? What about if we run?",o:["A) Don't we","B) Haven't we","C) Do we","D) Have we"],a:0},
+  {s:"Tenses — Fill in the blank",q:"107. You ---- so healthy now. Have you improved your diet?",o:["A) look","B) have looked","C) are looking","D) had looked"],a:0},
+  {s:"Tenses — Fill in the blank",q:"108. My friends ---- before they arrived at my place, so they didn't want the snacks I offered them.",o:["A) has eaten","B) have eaten","C) had eaten","D) were eating"],a:2},
+  {s:"Tenses — Fill in the blank",q:"109. In my life spent overseas, Thailand is the fifth country I ---- in.",o:["A) 've lived","B) live","C) 'm living","D) lived"],a:0},
+  {s:"Tenses — Fill in the blank",q:"110. I've just sold my bike. I ---- it for a long time, but I was getting too big for it.",o:["A) have had","B) had had","C) have been having","D) has have"],a:1},
+  {s:"Tenses — Fill in the blank",q:"111. Five years ago, they ---- to give up their regular teaching jobs.",o:["A) have decided","B) have been deciding","C) decided","D) were deciding"],a:2},
+  {s:"Tenses — Function",q:"112. Teenagers rarely write emails.\nThe function of using the present simple tense in the previous sentence is:",o:["A) Actions that started and finished at a specific time in the past.","B) Situations which are changing during the present time.","C) Facts and things that are generally true.","D) Scheduled or fixed events in the future."],a:2},
+  {s:"Tenses — Function",q:"113. Young people are writing by hand less often these days.\nThe function of the tense used above is:",o:["A) Situations which are changing during the present time / Changes and developments.","B) Actions in progress at the time of speaking.","C) The duration of actions that began in the past and continue up to the present.","D) The duration of states that began in the past and continue up to now."],a:0},
+  {s:"Tenses — Function",q:"114. We were writing to each other regularly back then.\nWe used the past continuous in the sentence above to talk about:",o:["A) A long activity interrupted by a shorter one.","B) Actions in progress at a specific time in the past.","C) Past processes with a present relevance/result.","D) An action in progress or repeated over a period of time up until now."],a:1},
+  {s:"Tenses — Function",q:"115. 'He's been writing thank-you letters all morning.'\nThe function of the tense used in the sentence above is:",o:["A) The duration of states that began in the past and continue up to now.","B) Actions and states which began in the past and continue until now.","C) An action in progress or repeated over a period of time up until now.","D) Experiences during a present period of time."],a:2},
+  {s:"Tenses — Exception",q:"116. All of the following can be used to talk about completed past actions and past processes with a present relevance/result EXCEPT:",o:["A) The lights have gone out. (And now it's pitch dark here).","B) He's changed dramatically. (He looks very different now.)","C) I've got better grades because I've been studying a lot lately.","D) I've sent five thousand text messages so far."],a:2},
+  {s:"Tenses — Identify",q:"117. The sentence which expresses an action that was completed at a specific time in the past:",o:["A) Neil Papworth sent the first text message in 1992.","B) I've sent five thousand text messages so far.","C) He now shares a flat with a friend.","D) She looks very fit."],a:0},
+  {s:"Tenses — Identify",q:"118. Which of the following is used to show the relationship between a situation in the past and an earlier state or action?",o:["A) Before Hassan met his wife, he had been single for a decade.","B) The news is spreading quickly.","C) He often loses touch with his colleagues.","D) While Hani was waiting for us, his mum was texting."],a:0},
+  {s:"Tenses — Fill in the blank",q:"119. I went to Julia's house to help put up party preparations, but she ---- it already, so we just chatted.",o:["A) did","B) had done","C) was doing","D) had been doing"],a:1},
+  {s:"Tenses — Fill in the blank",q:"120. Let's be patient! The bus will be here soon. We ---- for very long.",o:["A) aren't waiting","B) don't wait","C) haven't waited","D) haven't been waiting"],a:3},
+  {s:"Tenses — Fill in the blank",q:"121. Mum ---- dinner for an hour now. I hope it will be ready soon.",o:["A) cooks","B) has cooked","C) is cooking","D) has been cooking"],a:3},
+  {s:"Tenses — Fill in the blank",q:"122. You've got butter on your hands. ---- in the kitchen?",o:["A) Had you worked","B) Do you work","C) Have you been working","D) Did you work"],a:2},
+  {s:"Tenses — Fill in the blank",q:"123. This year the school ---- almost 100,000 euros on building new science labs.",o:["A) has been spending","B) spent","C) spends","D) has spent"],a:3},
+  {s:"Tenses — Fill in the blank",q:"124. I can see your hands are dirty because you ---- outside.",o:["A) 've worked","B) 're working","C) 've been working","D) work"],a:2},
+  {s:"Tenses — Fill in the blank",q:"125. I ---- a big dinner, so you can come over.",o:["A) have prepared","B) have been preparing","C) am preparing","D) prepare"],a:0},
+  {s:"Tenses — Fill in the blank",q:"126. I ---- a big meal, so all my pans are dirty.",o:["A) have prepared","B) have been preparing","C) am preparing","D) prepare"],a:1},
+  {s:"Tenses — Fill in the blank",q:"127. I ---- so let's go out.",o:["A) have eaten","B) have been eating","C) am eating","D) eat"],a:0},
+  {s:"Tenses — Fill in the blank",q:"128. I ----, so there are plates all over the table.",o:["A) have eaten","B) have been eating","C) am eating","D) eat"],a:1},
+  {s:"Tenses — Fill in the blank",q:"129. I ---- her for years.",o:["A) have known","B) have been knowing","C) know","D) am knowing"],a:0},
+  {s:"Tenses — Fill in the blank",q:"130. She ---- that laptop for over ten years.",o:["A) have been having","B) have had","C) have","D) has had"],a:3},
+  {s:"Tenses — Fill in the blank",q:"131. She ---- three pieces of the toast this morning.",o:["A) has eaten","B) has been eating","C) eat","D) is eating"],a:0},
+  {s:"Tenses — Fill in the blank",q:"132. I ---- in England for 3 years.",o:["A) have lived","B) had lived","C) lived","D) am living"],a:0},
+  {s:"Tenses — Fill in the blank",q:"133. I ---- here all day.",o:["A) has been","B) have been","C) was","D) had been"],a:1},
+  {s:"Tenses — Fill in the blank",q:"134. She ---- weights in the gym a lot lately and she's really strong now!",o:["A) has been using","B) uses","C) is using","D) was using"],a:0},
+  {s:"Similar meaning — Tenses",q:"135. Ahmad had studied for his exam and then he went to school.\nThe sentence which has a similar meaning is:",o:["A) After Ahmad studied to his exam, he went to school.","B) After Ahmad had gone to school, he studied for his exam.","C) After Ahmad had studied to his exam, he went to school.","D) After Ahmad went to school, he had studied for his exam."],a:2},
+  {s:"Similar meaning — Tenses",q:"136. We heard the good news on our way back home.\nThe sentence which has a similar meaning is:",o:["A) We heard the good news while we were coming back home.","B) We were hearing the good news while we came back home.","C) We had heard the good news while we came back home.","D) We heard the good news while we had come back home."],a:0},
+  {s:"Similar meaning — Tenses",q:"137. I haven't eaten meat for nearly a year.\nThe sentence that has a similar meaning is:",o:["A) The last time I ate meat was a year ago.","B) The last time I ate meat wasn't a year ago.","C) The last time I had eaten meat was a year ago.","D) The last time I have eaten meat was a year ago."],a:0},
+  {s:"Similar meaning — Tenses",q:"138. The last time Sana came to the cinema was last winter.\nThe sentence that has a similar meaning is:",o:["A) Sana hasn't been to the cinema since December.","B) Sana hasn't been to the cinema for December.","C) Sana hasn't been to the cinema ever since December.","D) Sana hasn't been to the cinema so far December."],a:0},
+  {s:"Tenses — Time expressions",q:"139. I have lost touch with a few of my friends --------.",o:["A) at the time","B) earlier today","C) in recent years","D) these days"],a:2},
+  {s:"Tenses — Time expressions",q:"140. Dad makes contact with his cousin --------, so they're not close.",o:["A) from time to time","B) right now","C) for","D) earlier today"],a:0},
+  {s:"Tenses — Time expressions",q:"141. My teacher took my mobile phone off me yesterday – I was talking to my friend --------!",o:["A) ever since","B) at the time","C) earlier today","D) once a week"],a:1},
+  {s:"Tenses — Time expressions",q:"142. Jaber prefers to stay in on Saturday nights --------.",o:["A) ever since","B) at the time","C) these days","D) in recent years"],a:2},
+  {s:"Tenses — Time expressions",q:"143. I've got better grades because I've been studying a lot --------.",o:["A) lately","B) last month","C) earlier today","D) tomorrow"],a:0},
+  {s:"Tenses — Fill in the blank",q:"144. Come to the party, --------?",o:["A) won't you","B) will you","C) do you","D) could you"],a:0},
+  {s:"Tenses — Punctuation",q:"149. My neighbours are playing loud music again. It's driving me up the wall --------\nThe correct punctuation mark that fills in the gap is:",o:["A) ?","B) ,","C) !","D) no punctuation mark"],a:2},
+  {s:"Tenses — Fill in the blank",q:"150. ---- football when you arrived to pick them up, or was the game over?",o:["A) Were the boys playing","B) Did the boys play","C) Had the boys played","D) Is the boys playing"],a:0},
+  {s:"Tenses — Fill in the blank",q:"151. I ---- a film when I got home from school.",o:["A) was watching","B) had watched","C) watched","D) watch"],a:0},
+  {s:"Tenses — Fill in the blank",q:"152. When I got home, the flat ---- of smoke.",o:["A) smells","B) is smelling","C) was smelling","D) smelt"],a:3},
+  {s:"Tenses — Fill in the blank",q:"153. When I got to the stadium, I ---- a huge queue.",o:["A) joined","B) was joining","C) had joined","D) join"],a:0},
+  {s:"Tenses — Fill in the blank",q:"154. Hani was riding his bike when he ---- his phone.",o:["A) was dropping","B) had dropped","C) dropped","D) drops"],a:2},
+  {s:"Tenses — Fill in the blank",q:"155. He ---- in English class when he realised that he had lost it.",o:["A) sits","B) was sitting","C) had sat","D) is sitting"],a:1},
+  {s:"Tenses — Question tags",q:"156. She's beautiful, --------?",o:["A) isn't she","B) hasn't she","C) is she","D) has she"],a:0},
+  {s:"Tenses — Question tags",q:"157. She's invited lots of friends, --------?",o:["A) isn't she","B) hasn't she","C) is she","D) has she"],a:1},
+  {s:"Tenses — Question tags",q:"158. She used to drink coffee, --------?",o:["A) didn't she","B) did she","C) do she","D) don't she"],a:0},
+  {s:"Tenses — Question tags",q:"159. They have to eat healthy food, --------?",o:["A) have they","B) haven't they","C) do they","D) don't they"],a:3},
+];
+
+let current=0,answers=new Array(questions.length).fill(null),mode='quiz';
+
+function render(){
+  const el=document.getElementById('main');
+  if(mode==='score'){renderScore(el);return;}
+  if(mode==='review'){renderReview(el);return;}
+  renderQuestion(el);
+}
+
+function renderQuestion(el){
+  const q=questions[current];
+  const answered=answers[current]!==null;
+  const pct=Math.round(((current+1)/questions.length)*100);
+  let optsHtml=q.o.map((opt,i)=>{
+    let cls='opt-btn',dis='';
+    if(answered){
+      dis='disabled';
+      if(i===q.a)cls+=' correct';
+      else if(i===answers[current]&&answers[current]!==q.a)cls+=' wrong';
+    }
+    return `<button class="${cls}" ${dis} onclick="choose(${i})">${opt}</button>`;
+  }).join('');
+  let feedback='';
+  if(answered){
+    if(answers[current]===q.a){
+      feedback=`<div class="feedback correct">✓ إجابة صحيحة!</div>`;
+    } else {
+      feedback=`<div class="feedback wrong">✗ خطأ — الإجابة الصحيحة: ${q.o[q.a]}</div>`;
+    }
+  }
+  el.innerHTML=`
+    <div class="progress-wrap">
+      <div class="q-counter"><span>سؤال ${current+1} من ${questions.length}</span><span>${pct}%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="q-card">
+      <span class="section-badge">${q.s}</span>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optsHtml}</div>
+      ${feedback}
+    </div>
+    <div class="nav">
+      ${current>0?`<button onclick="go(-1)">← السابق</button>`:''}
+      ${current<questions.length-1?`<button class="primary" onclick="go(1)">التالي →</button>`:`<button class="primary" onclick="finish()">إنهاء الامتحان ✓</button>`}
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+function renderScore(el){
+  const total=questions.length;
+  const correct=answers.filter((a,i)=>a===questions[i].a).length;
+  const wrong=answers.filter((a,i)=>a!==null&&a!==questions[i].a).length;
+  const skipped=answers.filter(a=>a===null).length;
+  const pct=Math.round((correct/total)*100);
+  const grade=pct>=90?'ممتاز 🏆':pct>=80?'جيد جداً 🌟':pct>=70?'جيد 👍':pct>=60?'مقبول 📝':'يحتاج مراجعة 📚';
+  const gc=pct>=70?'#EAF3DE':'#FCEBEB',gtc=pct>=70?'#27500A':'#501313';
+  el.innerHTML=`
+    <div class="score-card">
+      <div class="score-big">${correct}/${total}</div>
+      <div class="score-label">${pct}%</div>
+      <div class="grade-badge" style="background:${gc};color:${gtc}">${grade}</div>
+      <div class="score-breakdown">
+        <div class="stat-box cs"><div class="stat-num">${correct}</div><div class="stat-lbl">صحيح ✓</div></div>
+        <div class="stat-box ws"><div class="stat-num">${wrong}</div><div class="stat-lbl">خطأ ✗</div></div>
+        <div class="stat-box ss"><div class="stat-num">${skipped}</div><div class="stat-lbl">لم يُجب</div></div>
+      </div>
+      <br>
+      <button class="btn-review" onclick="startReview()">مراجعة الإجابات</button><br>
+      <button class="btn-restart" onclick="restart()">إعادة الامتحان</button>
+    </div>`;
+}
+
+function renderReview(el){
+  let html=`<div class="review-header"><button class="btn-restart" onclick="restart()">إعادة الامتحان</button><span class="review-title">مراجعة جميع الإجابات</span></div>`;
+  let lastSection='';
+  questions.forEach((q,i)=>{
+    const ua=answers[i],isC=ua===q.a,isS=ua===null;
+    if(q.s!==lastSection){
+      if(lastSection)html+=`<hr class="section-sep">`;
+      html+=`<div style="margin:1rem 0 0.5rem"><span class="section-badge">${q.s}</span></div>`;
+      lastSection=q.s;
+    }
+    const cb=isC?'border-color:#639922':isS?'':'border-color:#A32D2D';
+    html+=`<div class="q-card" style="${cb}"><div class="q-text">${q.q}</div><div class="options">`;
+    q.o.forEach((opt,oi)=>{
+      let cls='opt-btn';
+      if(oi===q.a)cls+=' correct';
+      else if(oi===ua&&!isC)cls+=' wrong';
+      html+=`<button class="${cls}" disabled>${opt}</button>`;
+    });
+    html+='</div>';
+    if(isS)html+=`<div class="skipped-note">لم تُجب على هذا السؤال</div>`;
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+function choose(i){if(answers[current]!==null)return;answers[current]=i;render();}
+function go(dir){current=Math.max(0,Math.min(questions.length-1,current+dir));render();}
+function finish(){mode='score';render();}
+function startReview(){mode='review';render();}
+function restart(){current=0;answers=new Array(questions.length).fill(null);mode='quiz';render();}
+
+render();
+</script>
+</body>
+</html>
